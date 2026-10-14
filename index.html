@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>IOE TEST 2 – GRADE 4</title>
+<style>
+:root{--bg:#e8f4ff;--card:#fff;--tx:#1d2b3a;--b:#1e88e5;--g:#2e9e4f;--y:#ffc43d;--o:#ff8a3d;--r:#d63c3c;--mut:#5b6b7b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10202f;--card:#1a2f44;--tx:#eef5fb;--mut:#a9bccd}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:"Segoe UI",system-ui,Arial,sans-serif;background:var(--bg);color:var(--tx);line-height:1.45}
+.w{max-width:760px;margin:0 auto;padding:14px}
+.card{background:var(--card);border-radius:20px;padding:20px;box-shadow:0 4px 14px #0002;margin-bottom:12px}
+h1{margin:0 0 6px;font-size:clamp(24px,6vw,36px);color:var(--b)}h2{margin:.2em 0}
+.sub{display:inline-block;background:var(--y);color:#3a2a00;padding:4px 14px;border-radius:99px;font-weight:700}
+button{font:inherit;cursor:pointer;border:0;border-radius:14px;padding:12px 18px;font-weight:700;color:#fff;background:var(--b)}
+button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible{outline:3px solid var(--o);outline-offset:2px}
+.big{font-size:20px;padding:14px 32px;background:var(--g)}.sec{background:var(--mut)}.or{background:var(--o)}
+.bar{height:12px;background:#9993;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--g);transition:width .3s}
+.top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-weight:700;margin-bottom:8px}
+.q{font-size:clamp(20px,4.5vw,26px);font-weight:700;margin:14px 0}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:14px;background:var(--card);color:var(--tx);border:3px solid #9996;font-size:18px}
+.opt.sel{border-color:var(--b);background:#1e88e522}
+.opt.ok{border-color:var(--g);background:#2e9e4f33}.opt.no{border-color:var(--r);background:#d63c3c2e}
+.fb{margin-top:10px;padding:12px;border-radius:12px;font-weight:600}.fb.ok{background:#2e9e4f33}.fb.no{background:#ff8a3d33}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.row button{flex:1 1 120px}
+.pop{animation:pop .5s}@keyframes pop{50%{transform:scale(1.04)}}
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:12px 0}
+.st div{background:#1e88e51f;border-radius:14px;padding:10px;text-align:center}.st b{display:block;font-size:26px}
+.tr{margin:8px 0}.tr span{font-size:14px}
+.wr{border-left:5px solid var(--o);padding:6px 12px;margin:8px 0;background:#ff8a3d1a;border-radius:8px}
+.hide{display:none}
+@media print{button,.nop{display:none}}
+</style></head><body><div class="w">
+<div id="intro" class="card" style="text-align:center">
+<h1>⭐ IOE TEST 2 – ENGLISH ADVENTURE ⭐</h1><span class="sub">100 Questions – Grade 4</span>
+<p style="text-align:left"><b>Cách chơi / How to play:</b><br>1. Chọn một đáp án (bấm hoặc phím A–D), rồi bấm <b>SUBMIT ANSWER</b> (hoặc Enter).<br>2. Mỗi câu đúng được 10 điểm, tối đa 1.000 điểm. Sai hoặc bỏ qua: 0 điểm.<br>3. Câu đã chấm điểm sẽ bị khóa. Có thể đánh dấu 🚩 để xem lại và bấm PREVIOUS để xem câu trước.<br>4. Thời gian dự kiến: <b>30 phút</b>. Hết giờ, bài tự động kết thúc.</p>
+<p><label><input type="checkbox" id="snd" checked> 🔊 Âm thanh (Sound)</label></p>
+<button class="big" id="start">START GAME</button><p id="err" style="color:var(--r)"></p></div>
+
+<div id="game" class="hide"><div class="card">
+<div class="top"><span id="qn"></span><span id="tm"></span><span id="sc"></span></div>
+<div class="bar"><i id="pb" style="width:0"></i></div>
+<div class="q" id="qt"></div><div id="ops"></div><div id="fb"></div>
+<div class="row"><button class="sec" id="prev">◀ PREVIOUS</button><button id="sub">SUBMIT ANSWER</button><button class="or" id="skip">SKIP</button><button class="sec" id="flg">🚩 Mark</button><button class="big" id="next" style="padding:12px 18px;font-size:inherit">NEXT QUESTION ▶</button></div>
+</div></div>
+
+<div id="end" class="hide"><div class="card"><h1 id="et">GAME COMPLETED!</h1><p id="msg" style="font-size:18px"></p>
+<div class="st" id="stats"></div><h2>Kết quả theo nhóm kiến thức</h2><div id="tp"></div>
+<div class="row nop"><button id="rv">REVIEW MISTAKES</button><button class="big" id="again">PLAY AGAIN</button><button class="or" id="rst">RESTART</button><button class="sec" id="prt">PRINT RESULTS</button></div></div>
+<div class="card hide" id="mis"><h2>Câu sai hoặc bỏ qua</h2><div id="ml"></div></div></div>
+</div>
+<script>
+"use strict";
+/* ===== DATA: topic|question|correct|wrong1|wrong2|wrong3|explanation (VI) ===== */
+const TOPICS={A:"Articles & Plurals",T:"Grammar & Tenses",C:"Comparison",D:"Adverbs & Question Words",V:"Vocabulary",N:"Numbers & Time",P:"Places",L:"Colors"};
+const RAW=`A|I see ___ kite.|a|an|two|many|Kite bắt đầu bằng phụ âm → a.
+A|I see ___ elephant.|an|a|two|many|Elephant bắt đầu bằng nguyên âm → an.
+A|I eat ___ apple pie.|an|a|two|many|Apple bắt đầu bằng nguyên âm → an.
+A|There is ___ owl in the tree.|an|a|two|many|Owl bắt đầu bằng âm nguyên âm → an.
+A|I have ___ egg.|an|a|two|many|Egg bắt đầu bằng nguyên âm → an.
+A|She wants ___ ice cream.|an|a|two|many|Ice bắt đầu bằng nguyên âm → an.
+A|This is ___ pen.|a|an|two|many|Pen bắt đầu bằng phụ âm → a.
+A|This is ___ open book.|an|a|two|many|Open bắt đầu bằng nguyên âm → an.
+A|The plural of 'baby' is ___.|babies|babys|babyes|babyies|Phụ âm + y → bỏ y, thêm ies.
+A|The plural of 'toy' is ___.|toys|toies|toyes|toyies|Nguyên âm + y → chỉ thêm s.
+T|We ___ at home now.|are|is|am|be|We đi với are.
+T|He ___ at home now.|is|am|are|be|He đi với is.
+T|She ___ happy today.|is|am|are|be|She đi với is.
+T|She ___ at school yesterday.|was|were|is|are|Yesterday → quá khứ; she → was.
+T|The students ___ at school yesterday.|were|was|is|are|Students (số nhiều), quá khứ → were.
+T|It ___ two dogs.|has|have|having|haves|It → has.
+T|I ___ a cat.|have|has|having|haves|I → have.
+T|He ___ a cat.|has|have|having|haves|He → has.
+T|He ___ to school every morning.|goes|go|going|went|Every morning → hiện tại đơn, he → goes.
+T|My sister ___ every morning.|sings|sing|singing|sang|Hiện tại đơn, ngôi thứ ba số ít → sings.
+T|She ___ football every day.|plays|play|playing|played|Every day → hiện tại đơn → plays.
+T|They ___ football at the moment.|are playing|play|played|playing|At the moment → hiện tại tiếp diễn.
+T|He ___ TV now.|isn't watching|wasn't watching|doesn't watched|not watch|Now → hiện tại tiếp diễn phủ định: isn't watching.
+T|___ they play football?|Do|Does|Are|Is|They + động từ thường → Do.
+T|The windows ___ every week.|are cleaned|clean|have cleaned|cleaning|Câu bị động hiện tại: are + V3.
+T|This book ___ in 2020.|was published|published|has published|is published|In 2020 (quá khứ), bị động → was published.
+T|He has studied English ___ he was five.|since|for|during|ago|Since + mốc thời gian / mệnh đề quá khứ.
+T|We have lived here ___ five years.|for|since|ago|during|For + khoảng thời gian.
+T|I ___ sushi before.|have never eaten|never ate|am never eating|never eat|Before → hiện tại hoàn thành: have never eaten.
+T|She said, "I can swim." → She said that she ___ swim.|could|can|will|must|Câu tường thuật: can → could.
+T|He said, "I will come." → He said that he ___ come.|would|will|shall|can|Câu tường thuật: will → would.
+T|You ___ drink and drive. It is illegal.|mustn't|must|would|should|Điều cấm → mustn't.
+T|Fish ___ fly.|can't|can|must|should|Cá không biết bay → can't.
+C|The comparative of 'young' is ___.|younger|more young|most young|youngest|Tính từ ngắn + er.
+C|The superlative of 'fast' is ___.|the fastest|faster|more fast|most fast|So sánh nhất: the + tính từ ngắn + est.
+C|The comparative of 'small' is ___.|smaller|more small|most small|smallest|Tính từ ngắn + er.
+C|The superlative of 'cold' is ___.|the coldest|colder|more cold|most cold|the + cold + est.
+C|The superlative of 'big' is ___.|the biggest|the bigest|more big|most big|Big gấp đôi phụ âm: biggest.
+C|Tom is ___ Jerry. (long)|longer than|long than|most long|very long than|So sánh hơn: longer + than.
+C|Tom is ___ Jerry. (old)|older than|old than|most old|very old than|So sánh hơn: older + than.
+D|The adverb form of 'quiet' is ___.|quietly|quieter|quietness|quiet|Tính từ + ly → trạng từ.
+D|The adverb form of 'angry' is ___.|angrily|angryly|angryer|angryness|Y → i rồi thêm ly: angrily.
+D|The adverb form of 'careful' is ___.|carefully|carefuler|carefulness|careful|Careful + ly = carefully.
+D|The adjective form of 'beauty' is ___.|beautiful|beautyful|beautyless|beautyness|Beauty → beautiful.
+D|Which adverb means 'almost never'?|rarely|always|usually|often|Rarely = hiếm khi.
+D|Which adverb means 'at some times but not always'?|sometimes|never|always|every|Sometimes = thỉnh thoảng.
+D|___ students are in the class?|How many|How much|How often|How long|Danh từ đếm được số nhiều → How many.
+D|___ rice do you have?|How much|How many|How often|How long|Rice không đếm được → How much.
+D|___ friends do you have?|How many|How much|How often|How long|Friends đếm được → How many.
+D|___ juice do you have?|How much|How many|How often|How long|Juice không đếm được → How much.
+D|___ water do you drink every day?|How much|How many|How long|How far|Water không đếm được → How much.
+D|___ is your teacher? – It's Mr Nam.|Who|When|Where|How many|Hỏi về người → Who.
+D|Mary is a girl. ___ is my friend.|She|He|It|They|Mary là bé gái → She.
+D|This is my pen. ___ is red.|It|He|She|They|Đồ vật → It.
+D|___ flowers over there are beautiful.|Those|This|That|It|Số nhiều + ở xa → Those.
+D|The girl ___ sits next to me is Lan.|who|which|where|when|Chỉ người làm chủ ngữ → who.
+P|What can you do at the post office?|Buy stamps and send letters|Borrow books|Watch movies|Buy food|Ở bưu điện, ta mua tem và gửi thư.
+P|Where do you send letters?|post office|hotel|cinema|church|Gửi thư ở bưu điện.
+P|Where do you buy food and groceries?|supermarket|airport|library|bank|Mua thực phẩm ở siêu thị.
+P|Where do you save money?|bank|airport|fire station|restaurant|Gửi tiền ở ngân hàng.
+P|Where do you stay when travelling?|hotel|church|post office|library|Ở khi đi du lịch → khách sạn.
+P|Where do you catch a train?|train station|stadium|library|airport|Bắt tàu hỏa ở ga tàu.
+N|What is the fourth month of the year?|April|February|November|May|Tháng 4 = April.
+N|Which month comes after July?|August|January|April|September|Sau July là August.
+N|Which day comes after Wednesday?|Thursday|Sunday|Saturday|Tuesday|Sau thứ Tư là thứ Năm.
+N|What is the ordinal of 4?|fourth|first|eighth|third|4 → fourth.
+N|How do you say the number 7?|seven|seventeen|five|nine|7 = seven.
+N|How do you say the number 13?|thirteen|eighteen|nineteen|five|13 = thirteen.
+N|What number does the word 'three' represent?|3|11|8|13|Three = 3.
+N|'Today' refers to the ___.|present|past|future|unknown|Today = hiện tại.
+N|'Next month' refers to the ___.|future|present|past|unknown|Next month = tương lai.
+L|What color is a lime?|green|gray|red|silver|Quả chanh lime màu xanh lá.
+L|What color is the sun?|yellow|purple|black|blue|Mặt trời màu vàng.
+L|What color is mud?|brown|orange|yellow|purple|Bùn màu nâu.
+L|What color is a fire truck?|red|white|gray|silver|Xe cứu hỏa màu đỏ.
+L|What color is a raven?|black|orange|purple|yellow|Quạ đen màu đen.
+V|What do you sleep on at night?|bed|mirror|sink|table|Ngủ trên giường.
+V|A person who flies airplanes is a ___.|pilot|photographer|mechanic|farmer|Pilot = phi công.
+V|A person who studies science is a ___.|scientist|pilot|farmer|singer|Scientist = nhà khoa học.
+V|In which season does it snow most?|winter|spring|summer|autumn|Tuyết rơi nhiều nhất vào mùa đông.
+V|What do people wear in winter?|warm clothes|swimsuits|light clothes|raincoats|Mùa đông mặc quần áo ấm.
+V|We wear a hat on our ___.|head|feet|hands|knees|Đội mũ trên đầu.
+V|What is a synonym for 'fast'?|quick|tiny|unhappy|furious|Fast ≈ quick.
+V|What is a synonym for 'brave'?|courageous|frightened|exhausted|finish|Brave ≈ courageous.
+V|What is the opposite of 'old'?|young|dirty|late|light|Old ↔ young.
+V|What is the opposite of 'hard'?|easy|small|late|dangerous|Hard ↔ easy (khó ↔ dễ).
+V|A doctor's written order for medicine is a ___.|prescription|temperature|toothache|bandage|Prescription = đơn thuốc.
+V|The process by which plants make food from sunlight is ___.|photosynthesis|nutrition|experiment|molecule|Quang hợp = photosynthesis.
+V|Which gas do plants release during photosynthesis?|oxygen|nitrogen|carbon dioxide|smoke|Cây thải ra khí oxygen.
+V|What is one benefit of planting more trees?|cleaner air|less shade|fewer rivers|warmer winters|Trồng cây giúp không khí sạch hơn.
+V|Which sport do players play by kicking a round ball on grass?|football|skiing|archery|swimming|Bóng đá = football.
+V|This vehicle has two wheels and pedals.|bicycle|truck|helicopter|boat|Xe đạp = bicycle.
+V|Growing plants as a hobby is called ___.|gardening|painting|woodworking|rock climbing|Làm vườn = gardening.
+V|What does 'endangered species' mean?|animals and plants at risk of extinction|common animals|animals that migrate|plants that grow fast|Loài có nguy cơ tuyệt chủng.
+V|'Look forward to' means ___.|wait for with excitement|postpone|search for information|raise a child|Mong chờ, háo hức.
+V|'Find out' means ___.|discover|stop working|display proudly|raise a child|Find out = khám phá, tìm ra.
+V|'Take up' (a hobby) means ___.|start a new hobby|find by chance|exhaust the supply of|anticipate with excitement|Take up = bắt đầu một sở thích mới.
+V|'Give up' means ___.|stop doing something|start a new hobby|give a present|find something|Give up = từ bỏ.
+V|The weather is 'boiling'. It means ___.|extremely hot|covered with clouds|raining lightly|very cold|Boiling = nóng như thiêu.
+V|'Windy' is a weather word. True or false?|True|False|||Windy (có gió) là từ chỉ thời tiết.`;
+/* ===== STATE ===== */
+const $=id=>document.getElementById(id),LIM=1800;
+let Q=[],ans=[],flag=[],cur=0,sel=null,left=LIM,tick=null,ac=null;
+const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function beep(ok){if(!$("snd").checked)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();[ok?[660,880]:[300,240]][0].forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.value=.08;o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+i*.15);o.stop(ac.currentTime+i*.15+.14)})}catch(e){}}
+/* Parse + validate data; shuffle options once per play */
+function build(){
+ const out=[];RAW.trim().split("\n").forEach((l,n)=>{const p=l.split("|"),c=p[2],o=p.slice(2,6).filter(Boolean),tf=o.length===2;
+  if(!TOPICS[p[0]]||!p[1]||!c||o.length<2||new Set(o).size!==o.length){console.error("Bad question",n+1);return}
+  out.push({t:p[0],q:p[1],c,o:tf?o:shuf(o.slice()),e:p[6]||""})});
+ return out}
+function start(){Q=build();if(Q.length!==100){$("err").textContent="Lỗi dữ liệu: cần đúng 100 câu, hiện có "+Q.length;return}
+ ans=Array(100).fill(null);flag=Array(100).fill(false);cur=0;left=LIM;
+ $("intro").classList.add("hide");$("end").classList.add("hide");$("game").classList.remove("hide");
+ clearInterval(tick);tick=setInterval(()=>{left--;if(left<=0){left=0;finish()}clock()},1000);show()}
+const clock=()=>{$("tm").textContent="⏱ "+String(left/60|0).padStart(2,"0")+":"+String(left%60).padStart(2,"0")};
+const score=()=>ans.reduce((s,a,i)=>s+(a>=0&&a!==null&&Q[i].o[a]===Q[i].c?10:0),0);
+function show(){const q=Q[cur],a=ans[cur],done=a!==null;sel=done?null:sel;
+ $("qn").textContent="Question "+(cur+1)+"/100";$("sc").textContent="⭐ "+score();clock();
+ $("pb").style.width=ans.filter(x=>x!==null).length+"%";$("qt").textContent=q.q;
+ $("ops").innerHTML=q.o.map((t,i)=>{let c="opt",m="";
+  if(done){if(t===q.c){c+=" ok";m=" ✔"}if(i===a&&t!==q.c){c+=" no";m=" ✘"}}else if(i===sel)c+=" sel";
+  return `<button class="${c}" data-i="${i}" ${done?"disabled":""}><b>${"ABCD"[i]}.</b> ${esc(t)}${m}</button>`}).join("");
+ let f="";if(done){const ok=a>=0&&q.o[a]===q.c;f=a<0?`<div class="fb no">Skipped – Đã bỏ qua. Đáp án đúng: <b>${esc(q.c)}</b>. ${esc(q.e)}</div>`:
+  `<div class="fb ${ok?"ok pop":"no"}">${ok?"✔ Correct! Excellent! ⭐":"✘ Not quite! Try your best!"} Đáp án đúng: <b>${esc(q.c)}</b>. ${esc(q.e)}</div>`}
+ $("fb").innerHTML=f;
+ $("sub").disabled=done||sel===null;$("skip").disabled=done;$("prev").disabled=cur===0;$("next").disabled=!done;
+ $("next").textContent=cur===99?"FINISH ✔":"NEXT QUESTION ▶";$("flg").textContent=flag[cur]?"🚩 Marked":"🚩 Mark"}
+function submit(){if(sel===null||ans[cur]!==null)return;ans[cur]=sel;beep(Q[cur].o[sel]===Q[cur].c);sel=null;show()}
+function skip(){if(ans[cur]!==null)return;ans[cur]=-1;sel=null;go(1)}
+function go(d){if(d>0&&cur===99){if(ans[cur]!==null)finish();return}cur=Math.max(0,Math.min(99,cur+d));sel=null;show()}
+function finish(){clearInterval(tick);$("game").classList.add("hide");$("end").classList.remove("hide");
+ const rows=Q.map((q,i)=>({q,i,a:ans[i]})),ok=rows.filter(r=>r.a!==null&&r.a>=0&&r.q.o[r.a]===r.q.c).length,
+  sk=rows.filter(r=>r.a===null||r.a<0).length,bad=100-ok-sk,sc=ok*10,used=LIM-left;
+ $("et").textContent=ok>=80?"CONGRATULATIONS!":"GAME COMPLETED!";
+ $("msg").textContent=ok>=90?"Tuyệt vời! Bạn là siêu sao tiếng Anh! 🌟":ok>=70?"Rất tốt! Hãy xem lại vài câu để hoàn hảo hơn nhé!":ok>=50?"Khá lắm! Cố gắng luyện thêm nhé, bạn sẽ tiến bộ nhanh!":"Cố lên! Xem lại phần giải thích rồi chơi lại để giỏi hơn nhé! 💪";
+ $("stats").innerHTML=[["Score",sc+"/1000"],["Correct",ok],["Wrong",bad],["Skipped",sk],["Accuracy",ok+"%"],["Time",String(used/60|0)+"m "+used%60+"s"]].map(x=>`<div>${x[0]}<b>${x[1]}</b></div>`).join("");
+ $("tp").innerHTML=Object.keys(TOPICS).map(k=>{const r=rows.filter(x=>x.q.t===k),g=r.filter(x=>x.a!==null&&x.a>=0&&x.q.o[x.a]===x.q.c).length,p=r.length?Math.round(g*100/r.length):0;
+  return `<div class="tr"><span>${TOPICS[k]}: ${g}/${r.length} (${p}%)</span><div class="bar"><i style="width:${p}%"></i></div></div>`}).join("");
+ const m=rows.filter(r=>!(r.a!==null&&r.a>=0&&r.q.o[r.a]===r.q.c));
+ $("ml").innerHTML=m.length?m.map(r=>`<div class="wr"><b>Q${r.i+1}.</b> ${esc(r.q.q)}<br>Bạn chọn: ${r.a===null||r.a<0?"(bỏ qua)":esc(r.q.o[r.a])} | Đáp án: <b>${esc(r.q.c)}</b><br><small>${esc(r.q.e)}</small></div>`).join(""):"🎉 Không có câu sai!";
+ $("mis").classList.add("hide");window.scrollTo(0,0)}
+$("start").onclick=start;$("again").onclick=start;$("rst").onclick=start;
+$("rv").onclick=()=>{$("mis").classList.remove("hide");$("mis").scrollIntoView({behavior:"smooth"})};
+$("prt").onclick=()=>{$("mis").classList.remove("hide");window.print()};
+$("sub").onclick=submit;$("skip").onclick=skip;$("prev").onclick=()=>go(-1);$("next").onclick=()=>go(1);
+$("flg").onclick=()=>{flag[cur]=!flag[cur];show()};
+$("ops").onclick=e=>{const b=e.target.closest(".opt");if(b&&ans[cur]===null){sel=+b.dataset.i;show()}};
+document.addEventListener("keydown",e=>{if($("game").classList.contains("hide"))return;const k=e.key.toUpperCase(),i="ABCD".indexOf(k);
+ if(i>=0&&i<Q[cur].o.length&&ans[cur]===null){sel=i;show()}else if(e.key==="Enter"){e.preventDefault();ans[cur]===null?submit():go(1)}});
+</script></body></html>
